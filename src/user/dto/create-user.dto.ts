@@ -24,6 +24,7 @@ export class CreateUserDto {
     message: 'username can not create with length greater than 30',
   })
   password: string;
+
   @IsNotEmpty()
   @IsString()
   firstName: string;
@@ -37,6 +38,7 @@ export class CreateUserDto {
   email: string;
 
   @IsPhoneNumber()
+  @IsOptional()
   phone: string;
 
   @IsOptional()

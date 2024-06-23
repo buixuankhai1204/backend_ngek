@@ -17,19 +17,16 @@ export class User {
   @Prop()
   lastName: string;
 
-  @Prop()
+  @Prop({ required: false })
   email: string;
 
-  @Prop()
+  @Prop({ required: false })
   phone: string;
 
-  @Prop()
+  @Prop({ required: false })
   age: number;
 
-  @Prop()
-  createdAt: Date;
-
-  @Prop({ default: 'user' })
+  @Prop({ required: false, default: 'user' })
   role: Role;
 }
 

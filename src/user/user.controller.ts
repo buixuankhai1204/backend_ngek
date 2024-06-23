@@ -56,8 +56,9 @@ export class UserController {
     return this.userService.createBulk(createUserDtos);
   }
 
-  @Post('signIn')
+  @Post('sign-in')
   async signIn(@Body() signInDto: SignInDto): Promise<{ accessToken: string }> {
+    console.log(signInDto);
     return this.userService.signIn(signInDto.username, signInDto.password);
   }
 }

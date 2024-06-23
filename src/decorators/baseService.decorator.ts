@@ -68,6 +68,8 @@ export const SortingParams = createParamDecorator(
   (validParams, ctx: ExecutionContext): Sorting => {
     const req = ctx.switchToHttp().getRequest();
     const sort = req.query.sort as string;
+    if (!validParams.length)
+      throw new BadRequestException('Invalid sort params');
     if (!sort)
       return {
         property: null,

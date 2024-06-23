@@ -3,7 +3,7 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './schemas/category.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { Service } from '../decorators/baseService.decorator';
 
 @Injectable()
@@ -56,22 +56,5 @@ export class CategoryService extends Service<
     }
 
     return category;
-  }
-
-  async remove(id: string) {
-    const deletedCategory: Category =
-      await this.categoryModel.findByIdAndUpdate(
-        id,
-        { isActive: 0 },
-        { new: true },
-      );
-    if (deletedCategory === null) {
-      throw new BadRequestException(
-        'id of category does not exist, please check this again',
-        { cause: new Error(), description: 'Some error description' },
-      );
-    }
-
-    return deletedCategory;
   }
 }
