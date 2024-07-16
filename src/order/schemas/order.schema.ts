@@ -1,8 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument } from 'mongoose';
-import { ProductQuantityOrder } from '../dto/create-order.dto';
+import mongoose, { Types } from 'mongoose';
 
-export type OrderDocument = HydratedDocument<Order>;
+export enum EStatusdelivery {
+  Cancel = 'Cancel',
+  Completed = 'Completed',
+  Delivering = 'Delivering',
+  Return = 'Return',
+}
 
 @Schema()
 export class Order {
@@ -10,22 +14,19 @@ export class Order {
   userId: string;
 
   @Prop({ required: true })
-  paymentId: string;
+  code: string;
 
   @Prop({ required: true })
-  addressId: string;
+  address: string;
 
-  @Prop()
-  product: ProductQuantityOrder;
+  @Prop({ required: true })
+  totalPrice: number;
 
-  @Prop()
-  total: string;
+  @Prop({ required: true })
+  statusDelivery: EStatusdelivery;
 
   @Prop()
   note: string;
-
-  @Prop({ default: 0 })
-  isActive: number;
 
   @Prop({ default: Date.now() })
   createdAt: Date;
@@ -35,3 +36,21 @@ export class Order {
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);
+
+@Schema()
+export class OrderVoucher {
+  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId })
+  orderId: Types.ObjectId;
+
+  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId })
+  voucherId: Types.ObjectId;
+
+  @Prop({ required: true })
+  totalPriceDown: number;
+
+  @Prop({ default: Date.now() })
+  createdAt: Date;
+
+  @Prop({ default: Date.now() })
+  updatedAt: Date;
+}

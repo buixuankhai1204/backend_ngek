@@ -23,7 +23,7 @@ export class UserService {
     return this.userModel.find().exec();
   }
 
-  findOne(id: number) {
+  findOne(id: number): string {
     return `This action returns a #${id} user`;
   }
 
@@ -34,7 +34,7 @@ export class UserService {
     return user;
   }
 
-  remove(id: number) {
+  remove(id: number): string {
     return `This action removes a #${id} user`;
   }
 
@@ -45,7 +45,7 @@ export class UserService {
   async signIn(
     username: string,
     password: string,
-  ): Promise<{ accessToken: string }> {
+  ): Promise<{ data: User; token: string }> {
     const user: User = await this.userModel.findOne({ username: username });
     if (!user) {
       throw new UnauthorizedException();
@@ -56,12 +56,12 @@ export class UserService {
     }
 
     const payload = {
-      sub: user.firstName,
+      sub: user.fullName,
       username: user.username,
       role: user.role,
     };
-    const accessToken = await this.jwtService.signAsync(payload);
+    const token = await this.jwtService.signAsync(payload);
 
-    return { accessToken: accessToken };
+    return { data: user, token: token };
   }
 }

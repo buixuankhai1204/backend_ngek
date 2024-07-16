@@ -5,6 +5,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { FilterQuery, Model, Types } from 'mongoose';
+import { IResponse } from '../ultility/interfaceModel';
 
 export type PaginatedResource<T> = {
   total: number;
@@ -127,8 +128,10 @@ export const FilteringParams = createParamDecorator(
 );
 
 @Injectable()
-export class Service<T, P, U> {
-  constructor(private readonly repository: Model<T>) {}
+export abstract class Service<T, P, U> {
+  protected constructor(private readonly repository: Model<T>) {
+  }
+
   getWhere = (filter: Filtering): FilterQuery<Filtering> => {
     if (!filter) return {};
     if (filter.rule == FilterRule.NOT_EQUALS)
@@ -146,15 +149,16 @@ export class Service<T, P, U> {
     if (filter.rule == FilterRule.NOT_IN)
       return { [filter.property]: { $nin: filter.value } };
   };
+
   async findAll(
     filter?: Filtering,
     sort?: Sorting,
     pagination?: Pagination,
-  ): Promise<T[]> {
+  ): Promise<IResponse<T>> {
     const filterConvert: FilterQuery<Filtering> = filter
       ? this.getWhere(filter)
       : (null as FilterQuery<Filtering>);
-    return this.repository
+    const data: T[] = await this.repository
       .find(filterConvert)
       .skip(pagination.offset)
       .sort({
@@ -162,18 +166,44 @@ export class Service<T, P, U> {
           sort.direction == 'asc' ? 1 : -1,
       })
       .limit(pagination.limit);
+    return {
+      statusCode: 200,
+      message: 'create new record success',
+      total: data.length,
+      data,
+    };
   }
 
-  async findOne(id: Types.ObjectId): Promise<T> {
+  async create(createRequest: P[]): Promise<IResponse<T>> {
+    const data: T[] = await this.repository.create(createRequest);
+    if (!data) {
+      throw new Error('Can not create new data');
+    }
+
+    return {
+      statusCode: 200,
+      message: 'create new record success',
+      total: 1,
+      data,
+    };
+  }
+
+  async findOne(id: Types.ObjectId): Promise<IResponse<T>> {
     const data: T = await this.repository.findById(id);
     if (!data) {
       throw new BadRequestException('Can not find a this record');
     }
 
-    return data;
+    return {
+      statusCode: 200,
+      message: 'get record with id success',
+      total: 1,
+      data: [data],
+    };
   }
 
-  async updateOne(id: Types.ObjectId, updateRequest: U): Promise<T> {
+
+  async updateOne(id: Types.ObjectId, updateRequest: U): Promise<IResponse<T>> {
     const updateData: T = await this.repository.findByIdAndUpdate(
       id,
       updateRequest,
@@ -184,10 +214,15 @@ export class Service<T, P, U> {
       throw new BadRequestException('Can not update this record');
     }
 
-    return updateData;
+    return {
+      statusCode: 200,
+      message: 'update record with id success',
+      total: 1,
+      data: [updateData],
+    };
   }
 
-  async remove(id: string): Promise<T> {
+  async remove(id: Types.ObjectId): Promise<IResponse<T>> {
     const deleteData: T = await this.repository.findByIdAndUpdate(
       id,
       { isActive: 0 },
@@ -198,15 +233,12 @@ export class Service<T, P, U> {
       throw new BadRequestException('Can not delete this record');
     }
 
-    return deleteData;
+    return {
+      statusCode: 200,
+      message: 'delete new record success',
+      total: 1,
+      data: [deleteData],
+    };
   }
 
-  async create(createRequest: P): Promise<T> {
-    const data: T = await this.repository.create(createRequest);
-    if (!data) {
-      throw new Error('Can not create new data');
-    }
-
-    return data;
-  }
 }

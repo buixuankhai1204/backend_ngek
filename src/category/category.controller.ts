@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  Logger,
   UseGuards,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
@@ -22,18 +21,18 @@ import {
   SortingParams,
 } from '../decorators/baseService.decorator';
 import { Types } from 'mongoose';
-import { AuthGuard } from 'src/user/user.guard';
-import { Roles } from 'src/roles.decorator';
+import { IResponse } from '../ultility/interfaceModel';
+import { AuthGuard } from '../user/user.guard';
+import { Roles } from '../roles.decorator';
 
 @Controller('/category')
 export class CategoryController {
-  private readonly logger = new Logger(CategoryController.name);
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
   @UseGuards(AuthGuard)
   @Roles(['admin'])
-  create(@Body() createCategoryDto: CreateCategoryDto): Promise<Category> {
+  create(@Body() createCategoryDto: CreateCategoryDto): Promise<IResponse<Category>> {
     return this.categoryService.create(createCategoryDto);
   }
 
@@ -42,15 +41,12 @@ export class CategoryController {
     @PaginationParams() paginationParams: Pagination,
     @SortingParams(['name', 'parentCategoryId']) sort?: Sorting,
     @FilteringParams(['name', 'parentCategoryId']) filter?: Filtering,
-  ): Promise<Category[]> {
-    this.logger.log(
-      `REST request to get cities: ${JSON.stringify(paginationParams)}, ${sort}, ${filter}`,
-    );
+  ): Promise<IResponse<Category>> {
     return this.categoryService.findAll(filter, sort, paginationParams);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Category> {
+  findOne(@Param('id') id: string): Promise<IResponse<Category>> {
     return this.categoryService.findOne(new Types.ObjectId(id));
   }
 
@@ -58,7 +54,7 @@ export class CategoryController {
   update(
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
-  ) {
+  ): Promise<IResponse<Category>> {
     return this.categoryService.updateOne(
       new Types.ObjectId(id),
       updateCategoryDto,
@@ -66,7 +62,7 @@ export class CategoryController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<Category> {
-    return this.categoryService.remove(id);
+  remove(@Param('id') id: string): Promise<IResponse<Category>> {
+    return this.categoryService.remove(new Types.ObjectId(id));
   }
 }

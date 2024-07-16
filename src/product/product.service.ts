@@ -1,10 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Product } from './schemas/product.schema';
-import { Model, Types } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
+import { Product, ProductImage, ProductVoucher } from './schemas/product.schema';
 import { Service } from '../decorators/baseService.decorator';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model, Promise, Types } from 'mongoose';
+import { IResponse } from '../ultility/interfaceModel';
+import { Voucher } from '../voucher/schemas/voucher.schema';
+import { UploadImagesDto } from './dto/upload-images.dto';
 
 @Injectable()
 export class ProductService extends Service<
@@ -12,50 +15,54 @@ export class ProductService extends Service<
   CreateProductDto,
   UpdateProductDto
 > {
-  constructor(@InjectModel(Product.name) private productModel: Model<Product>) {
+  constructor(
+    @InjectModel(Product.name) private productModel: Model<Product>,
+    @InjectModel(Voucher.name) private voucherModel: Model<Voucher>,
+    @InjectModel(ProductVoucher.name) private productVoucherModel: Model<ProductVoucher>,
+    @InjectModel(ProductImage.name) private productImageModel: Model<ProductImage>,
+  ) {
     super(productModel);
   }
 
-  async create(createProductDto: CreateProductDto): Promise<Product> {
-    const product: Product = await this.productModel.create(createProductDto);
-    if (!product) {
-      throw new BadRequestException(
-        'can not create this product, please check again!',
-      );
-    }
-
-    return product;
+  findOneCustom(id: Types.ObjectId): Promise<IResponse<unknown>> {
+    return Promise.resolve(undefined);
   }
 
-  async findOne(id: Types.ObjectId): Promise<Product> {
-    const product: Product[] = await this.productModel.find({
-      _id: id,
-      isActive: 1,
-    });
+  async addNewVoucherForProduct(productId: Types.ObjectId, voucherId: Types.ObjectId): Promise<IResponse<void>> {
+    const product = await this.productModel.findById(productId);
     if (!product) {
-      throw new BadRequestException(
-        'id of product does not exist, please check this again',
-        { cause: new Error(), description: 'Some error description' },
-      );
+      throw new BadRequestException('Can not find product by this id');
     }
 
-    return product[0];
+    const voucher = await this.voucherModel.findById(voucherId);
+    if (!voucher) {
+      throw new BadRequestException('Can not find voucher by this id');
+    }
+
+    await this.productVoucherModel.create({ voucherId, productId });
+
+    return {
+      statusCode: 200,
+      message: 'create new bill success',
+      total: 0,
+      data: [],
+    };
   }
 
-  async remove(id: string) {
-    const deleteProduct: Product | null =
-      await this.productModel.findByIdAndUpdate(
-        id,
-        { isActive: 0 },
-        { new: true },
-      );
-    if (!deleteProduct) {
-      throw new BadRequestException(
-        'id of product does not exist, please check this again',
-        { cause: new Error(), description: 'Some error description' },
-      );
+  async uploadImages(images: UploadImagesDto): Promise<IResponse<void>> {
+    const product = await this.productModel.findById(images[0].productId);
+    if (!product) {
+      throw new BadRequestException("Can not find this product");
     }
-
-    return deleteProduct;
+      const newImages = await this.productImageModel.create(images);
+    if (!newImages) {
+      throw new BadRequestException('Can not create images');
+    }
+    return {
+      statusCode: 200,
+      message: 'create list image for product success',
+      total: 0,
+      data: [],
+    };
   }
 }

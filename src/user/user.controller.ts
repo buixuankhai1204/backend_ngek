@@ -57,8 +57,15 @@ export class UserController {
   }
 
   @Post('sign-in')
-  async signIn(@Body() signInDto: SignInDto): Promise<{ accessToken: string }> {
-    console.log(signInDto);
+  async signIn(
+    @Body() signInDto: SignInDto,
+  ): Promise<{ data: User; token: string }> {
+    const debug = await this.userService.signIn(
+      signInDto.username,
+      signInDto.password,
+    );
+
+    console.log(debug);
     return this.userService.signIn(signInDto.username, signInDto.password);
   }
 }

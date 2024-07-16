@@ -9,8 +9,12 @@ import { CategoryModule } from './category/category.module';
 import { ProductModule } from './product/product.module';
 import { ImageModule } from './image/image.module';
 import { OrderModule } from './order/order.module';
-import { PaymentModule } from './payment/payment.module';
-import { PaymentMethodModule } from './payment-method/payment-method.module';
+import { BannerModule } from './banner/banner.module';
+import { VoucherModule } from './voucher/voucher.module';
+import { SupplyModule } from './supply/supply.module';
+import { BillModule } from './bill/bill.module';
+import { ProductImageModule } from './product-image/product-image.module';
+import { ProductBillModule } from './product-bill/product-bill.module';
 // import configuration from 'config/configuration';
 import databaseConfig from '../config/database.config';
 import * as Joi from 'joi';
@@ -27,7 +31,7 @@ import * as Joi from 'joi';
         NODE_ENV: Joi.string()
           .valid('development', 'production')
           .default('development'),
-        PORT: Joi.number().default(3000),
+        PORT: Joi.number().default(8000),
         DATABASE_USER: Joi.string().default(null),
         DATABASE_PASSWORD: Joi.string().default(null),
         HOST: Joi.string().default('localhost'),
@@ -43,8 +47,12 @@ import * as Joi from 'joi';
     ProductModule,
     ImageModule,
     OrderModule,
-    PaymentModule,
-    PaymentMethodModule,
+    BannerModule,
+    VoucherModule,
+    SupplyModule,
+    BillModule,
+    ProductImageModule,
+    ProductBillModule,
   ],
   controllers: [AppController],
   providers: [AppService],
