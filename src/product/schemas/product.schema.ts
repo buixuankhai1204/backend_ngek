@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Types } from 'mongoose';
+import mongoose from 'mongoose';
 
 export enum ETypeSize {
   S = 'S',
@@ -46,71 +46,10 @@ export class Product {
   updatedAt: Date;
 }
 
-export const ProductSchema = SchemaFactory.createForClass(Product);
+export const ProductSchema =
+  SchemaFactory.createForClass(Product);
 
-@Schema()
-export class ProductVoucher {
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId })
-  productId: Types.ObjectId;
 
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId })
-  voucherId: Types.ObjectId;
-
-  @Prop({ default: Date.now() })
-  createdAt: Date;
-
-  @Prop({ default: Date.now() })
-  updatedAt: Date;
-}
-
-export const ProductVoucherSchema =
-  SchemaFactory.createForClass(ProductVoucher);
-
-@Schema()
-export class ProductOrder {
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId })
-  productId: Types.ObjectId;
-
-  @Prop({ required: true })
-  orderId: Types.ObjectId;
-
-  @Prop({ required: true })
-  quantity: number;
-
-  @Prop({ required: true })
-  price: number;
-
-  @Prop({ required: true })
-  totalPrice: number;
-
-  @Prop({ default: Date.now() })
-  createdAt: Date;
-
-  @Prop({ default: Date.now() })
-  updatedAt: Date;
-}
-
-export const ProductOrderSchema = SchemaFactory.createForClass(ProductOrder);
-
-@Schema()
-export class ProductImage {
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId })
-  productId: string;
-
-  @Prop({ required: true })
-  imageUrl: string;
-
-  @Prop({ required: true })
-  isDefault: boolean;
-
-  @Prop({ default: Date.now() })
-  createdAt: Date;
-
-  @Prop({ default: Date.now() })
-  updatedAt: Date;
-}
-
-export const ProductImageSchema = SchemaFactory.createForClass(ProductImage);
 
 @Schema()
 export class ProductQuantity {

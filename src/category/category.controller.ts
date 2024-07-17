@@ -32,7 +32,7 @@ export class CategoryController {
   @Post()
   @UseGuards(AuthGuard)
   @Roles(['admin'])
-  create(@Body() createCategoryDto: CreateCategoryDto): Promise<IResponse<Category>> {
+  create(@Body() createCategoryDto: CreateCategoryDto[]): Promise<IResponse<Category>> {
     return this.categoryService.create(createCategoryDto);
   }
 

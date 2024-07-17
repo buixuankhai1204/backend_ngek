@@ -1,14 +1,11 @@
 import { IsNotEmpty } from 'class-validator';
 
-export class CreateProductBillDto {
+export class CreateProductOrderDto {
   @IsNotEmpty()
-  productId: string
+  productId: string;
 
   @IsNotEmpty()
-  billId: string;
-
-  @IsNotEmpty()
-  quantity: string
+  orderId: string;
 
   @IsNotEmpty()
   price: number;
@@ -17,8 +14,5 @@ export class CreateProductBillDto {
   totalPrice: number;
 
   @IsNotEmpty()
-  color: string;
-
-  @IsNotEmpty()
-  size: string;
+  quantity: number;
 }

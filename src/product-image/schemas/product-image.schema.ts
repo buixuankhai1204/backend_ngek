@@ -1,8 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import mongoose from 'mongoose';
 
 @Schema()
 export class ProductImage {
-  @Prop({ required: true, ref: 'Product' })
+  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Product' })
   productId: string;
 
   @Prop({ required: true })

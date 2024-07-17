@@ -12,7 +12,7 @@ export class SupplyController {
   }
 
   @Post()
-  create(@Body() createSupplyDto: CreateSupplyDto): Promise<IResponse<Supply>> {
+  create(@Body() createSupplyDto: CreateSupplyDto[]): Promise<IResponse<Supply>> {
     return this.supplyService.create(createSupplyDto);
   }
 

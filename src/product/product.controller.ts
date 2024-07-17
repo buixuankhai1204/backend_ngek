@@ -13,7 +13,15 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Types } from 'mongoose';
 import { IResponse } from '../ultility/interfaceModel';
 import { Product } from './schemas/product.schema';
-import { UploadImagesDto } from './dto/upload-images.dto';
+import { CreateProductImageDto } from '../product-image/dto/create-product-image.dto';
+import {
+  Filtering,
+  FilteringParams,
+  Pagination,
+  PaginationParams,
+  Sorting,
+  SortingParams,
+} from '../decorators/baseService.decorator';
 
 @Controller('/product')
 export class ProductController {
@@ -21,13 +29,16 @@ export class ProductController {
   }
 
   @Post()
-  async create(@Body() createProductDto: CreateProductDto): Promise<IResponse<Product>> {
+  async create(@Body() createProductDto: CreateProductDto[]): Promise<IResponse<Product>> {
     return await this.productService.create(createProductDto);
   }
 
   @Get()
-  findAll(): Promise<IResponse<Product>> {
-    return this.productService.findAll();
+  findAll(
+    @PaginationParams() paginationParams: Pagination,
+    @SortingParams(['name', 'minPrice', 'maxPrice']) sort?: Sorting,
+    @FilteringParams(['name']) filter?: Filtering): Promise<IResponse<Product>> {
+    return this.productService.findAll(filter, sort, paginationParams);
   }
 
   @Get(':id')
@@ -55,7 +66,7 @@ export class ProductController {
   }
 
   @Post()
-  uploadImages(@Body('uploadImagesDto') uploadImagesDto: UploadImagesDto): Promise<IResponse<void>> {
-      return this.productService.uploadImages(uploadImagesDto);
+  uploadImages(@Body('uploadImagesDto') uploadImagesDto: CreateProductImageDto[]): Promise<IResponse<void>> {
+    return this.productService.uploadImages(uploadImagesDto);
   }
 }

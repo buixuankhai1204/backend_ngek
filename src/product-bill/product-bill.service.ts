@@ -41,7 +41,7 @@ export class ProductBillService extends Service<ProductBill, CreateProductBillDt
     };
   }
 
-  async update(billId: Types.ObjectId, products: CreateProductBillDto[]): Promise<IResponse<ProductBill>> {
+  async update( products: UpdateProductBillDto[]): Promise<IResponse<ProductBill>> {
     const bulkUpdateProductQuantity = products.map(product => {
         return [
           ({
@@ -52,7 +52,7 @@ export class ProductBillService extends Service<ProductBill, CreateProductBillDt
           }),
           ({
             updateOne: {
-              filter: { productId: product.productId },
+              filter: { billId: product.billId },
               update: { $set: product },
             },
           }),

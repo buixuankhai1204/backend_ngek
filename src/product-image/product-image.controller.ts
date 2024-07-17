@@ -1,23 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ProductImageService } from './product-image.service';
-import { CreateProductImageDto } from './dto/create-product-image.dto';
+import { CreateProductImageDto, GetImagesByProductIdDto } from './dto/create-product-image.dto';
 import { UpdateProductImageDto } from './dto/update-product-image.dto';
 import { IResponse } from '../ultility/interfaceModel';
-import { ProductImage } from './schemas/productImage.schema';
+import { ProductImage } from './schemas/product-image.schema';
 import { Types } from 'mongoose';
 
 @Controller('product-image')
 export class ProductImageController {
-  constructor(private readonly productImageService: ProductImageService) {}
+  constructor(private readonly productImageService: ProductImageService) {
+  }
 
   @Post()
-  create(@Body() createProductImageDto: CreateProductImageDto): Promise<IResponse<ProductImage>> {
+  create(@Body() createProductImageDto: CreateProductImageDto[]): Promise<IResponse<ProductImage>> {
     return this.productImageService.create(createProductImageDto);
   }
 
   @Get()
-  findAll(): Promise<IResponse<ProductImage>>  {
+  findAll(): Promise<IResponse<ProductImage>> {
     return this.productImageService.findAll();
+  }
+
+  @Get('image')
+  findListImagesByProductId(@Query() product: GetImagesByProductIdDto): Promise<IResponse<ProductImage>> {
+
+    return this.productImageService.findListImagesByProductId(new Types.ObjectId(product.productId));
   }
 
   @Get(':id')
@@ -25,7 +32,7 @@ export class ProductImageController {
     return this.productImageService.findOne(new Types.ObjectId(id));
   }
 
-  @Patch(':id')
+  @Patch('')
   update(@Param('id') id: string, @Body() updateProductImageDto: UpdateProductImageDto): Promise<IResponse<ProductImage>> {
     return this.productImageService.updateOne(new Types.ObjectId(id), updateProductImageDto);
   }

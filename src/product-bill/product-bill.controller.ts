@@ -12,7 +12,7 @@ export class ProductBillController {
   }
 
   @Post()
-  create(@Body() createProductBillDto: CreateProductBillDto): Promise<IResponse<ProductBill>> {
+  create(@Body() createProductBillDto: CreateProductBillDto[]): Promise<IResponse<ProductBill>> {
     return this.productBillService.create(createProductBillDto);
   }
 
@@ -27,12 +27,12 @@ export class ProductBillController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductBillDto: UpdateProductBillDto): Promise<IResponse<ProductBill>> {
-    return this.productBillService.update(new Types.ObjectId(id), updateProductBillDto);
+  update(@Param('id') id: string, @Body() updateProductBillDto: UpdateProductBillDto[]): Promise<IResponse<ProductBill>> {
+    return this.productBillService.update(updateProductBillDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string): Promise<IResponse<ProductBill>> {
-    return this.productBillService.remove(new Types.ObjectId(id));
+    return this.productBillService.forceRemove(new Types.ObjectId(id));
   }
 }

@@ -1,11 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { BillService } from './bill.service';
-import { AddProductForBillDto, CreateBillDto } from './dto/create-bill.dto';
+import { CreateBillDto } from './dto/create-bill.dto';
 import { UpdateBillDto } from './dto/update-bill.dto';
 import { IResponse } from '../ultility/interfaceModel';
 import { Bill } from './schemas/bill.schema';
 import { Types } from 'mongoose';
-import { BillWithListProduct } from './entities/bill.entity';
 
 @Controller('bill')
 export class BillController {
@@ -13,7 +12,7 @@ export class BillController {
   }
 
   @Post()
-  create(@Body() createBillDto: CreateBillDto): Promise<IResponse<Bill>> {
+  create(@Body() createBillDto: CreateBillDto[]): Promise<IResponse<Bill>> {
     return this.billService.create(createBillDto);
   }
 
@@ -23,8 +22,8 @@ export class BillController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<IResponse<BillWithListProduct>> {
-    return this.billService.findOneCustom(new Types.ObjectId(id));
+  findOne(@Param('id') id: string): Promise<IResponse<Bill>> {
+    return this.billService.findOne(new Types.ObjectId(id));
   }
 
   @Patch(':id')
@@ -40,11 +39,5 @@ export class BillController {
   @Delete(':billId')
   deleteProductInBill(@Param('billId') billId: string, @Body('productId') productId: string): Promise<IResponse<void>> {
     return this.billService.deleteProductInBill(new Types.ObjectId(billId), new Types.ObjectId(productId));
-  }
-
-  @Patch(':billId')
-  updateProductInBill(@Body('billId') billId: string,
-                      @Body('products') productInBillDto: AddProductForBillDto[]): Promise<IResponse<void>> {
-    return this.billService.updateProductInBill(new Types.ObjectId(billId), productInBillDto);
   }
 }

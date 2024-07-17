@@ -123,6 +123,7 @@ export const FilteringParams = createParamDecorator(
     if (!Object.values(FilterRule).includes(rule as FilterRule))
       throw new BadRequestException(`Invalid filter rule: ${rule}`);
 
+    console.log(property,rule,value)
     return { property, rule, value };
   },
 );
@@ -135,6 +136,8 @@ export abstract class Service<T, P, U> {
   getWhere = (filter: Filtering): FilterQuery<Filtering> => {
     if (!filter) return {};
     if (filter.rule == FilterRule.NOT_EQUALS)
+      return { [filter.property]: { $ne: filter.value } };
+    if(filter.rule == FilterRule.EQUALS)
       return { [filter.property]: { $eq: filter.value } };
     if (filter.rule == FilterRule.GREATER_THAN)
       return { [filter.property]: { $gt: filter.value } };
@@ -168,7 +171,7 @@ export abstract class Service<T, P, U> {
       .limit(pagination.limit);
     return {
       statusCode: 200,
-      message: 'create new record success',
+      message: 'Get list records success',
       total: data.length,
       data,
     };
@@ -183,7 +186,7 @@ export abstract class Service<T, P, U> {
     return {
       statusCode: 200,
       message: 'create new record success',
-      total: 1,
+      total: data.length,
       data,
     };
   }
@@ -241,4 +244,20 @@ export abstract class Service<T, P, U> {
     };
   }
 
+  async forceRemove(id: Types.ObjectId): Promise<IResponse<T>> {
+    const deleteData: T = await this.repository.findByIdAndDelete(
+      id,
+    );
+
+    if (!deleteData) {
+      throw new BadRequestException('Can not delete this record');
+    }
+
+    return {
+      statusCode: 200,
+      message: 'delete new record success',
+      total: 1,
+      data: [deleteData],
+    };
+  }
 }

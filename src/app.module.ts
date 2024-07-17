@@ -7,7 +7,6 @@ import { ConfigModule } from '@nestjs/config';
 import { UserAddressModule } from './user-address/user-address.module';
 import { CategoryModule } from './category/category.module';
 import { ProductModule } from './product/product.module';
-import { ImageModule } from './image/image.module';
 import { OrderModule } from './order/order.module';
 import { BannerModule } from './banner/banner.module';
 import { VoucherModule } from './voucher/voucher.module';
@@ -15,7 +14,8 @@ import { SupplyModule } from './supply/supply.module';
 import { BillModule } from './bill/bill.module';
 import { ProductImageModule } from './product-image/product-image.module';
 import { ProductBillModule } from './product-bill/product-bill.module';
-// import configuration from 'config/configuration';
+import { ProductVoucherModule } from './product-voucher/product-voucher.module';
+import { ProductOrderModule } from './product-order/product-order.module';
 import databaseConfig from '../config/database.config';
 import * as Joi from 'joi';
 
@@ -45,7 +45,6 @@ import * as Joi from 'joi';
     UserModule,
     CategoryModule,
     ProductModule,
-    ImageModule,
     OrderModule,
     BannerModule,
     VoucherModule,
@@ -53,6 +52,8 @@ import * as Joi from 'joi';
     BillModule,
     ProductImageModule,
     ProductBillModule,
+    ProductVoucherModule,
+    ProductOrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],

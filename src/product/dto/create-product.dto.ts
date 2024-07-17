@@ -1,7 +1,6 @@
 import {
+  IsBoolean,
   IsNotEmpty,
-  IsNumber,
-  IsNumberString,
   IsOptional,
   MaxLength,
   MinLength,
@@ -14,25 +13,21 @@ export class CreateProductDto {
   name: string;
 
   @IsNotEmpty()
-  imageId: string;
-
-  @IsNotEmpty()
   categoryId: string;
 
   @IsNotEmpty()
   description: string;
 
   @IsNotEmpty()
-  size: string[];
+  thumbnail: string;
 
   @IsNotEmpty()
-  color: string[];
+  minPrice: number;
 
   @IsNotEmpty()
-  @IsNumberString()
-  price: string;
+  maxPrice: number;
 
   @IsOptional()
-  @IsNumber()
-  isActive: number;
+  @IsBoolean()
+  isActive: boolean;
 }

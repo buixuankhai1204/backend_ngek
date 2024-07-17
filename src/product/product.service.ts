@@ -1,13 +1,15 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Product, ProductImage, ProductVoucher } from './schemas/product.schema';
+import { Product } from './schemas/product.schema';
 import { Service } from '../decorators/baseService.decorator';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Promise, Types } from 'mongoose';
 import { IResponse } from '../ultility/interfaceModel';
 import { Voucher } from '../voucher/schemas/voucher.schema';
-import { UploadImagesDto } from './dto/upload-images.dto';
+import { ProductVoucher } from '../product-voucher/schemas/product-voucher.schema';
+import { ProductImage } from '../product-image/schemas/product-image.schema';
+import { CreateProductImageDto } from '../product-image/dto/create-product-image.dto';
 
 @Injectable()
 export class ProductService extends Service<
@@ -22,10 +24,6 @@ export class ProductService extends Service<
     @InjectModel(ProductImage.name) private productImageModel: Model<ProductImage>,
   ) {
     super(productModel);
-  }
-
-  findOneCustom(id: Types.ObjectId): Promise<IResponse<unknown>> {
-    return Promise.resolve(undefined);
   }
 
   async addNewVoucherForProduct(productId: Types.ObjectId, voucherId: Types.ObjectId): Promise<IResponse<void>> {
@@ -49,13 +47,13 @@ export class ProductService extends Service<
     };
   }
 
-  async uploadImages(images: UploadImagesDto): Promise<IResponse<void>> {
+  async uploadImages(images: CreateProductImageDto[]): Promise<IResponse<void>> {
     const product = await this.productModel.findById(images[0].productId);
     if (!product) {
       throw new BadRequestException("Can not find this product");
     }
       const newImages = await this.productImageModel.create(images);
-    if (!newImages) {
+    if (!newImages.length) {
       throw new BadRequestException('Can not create images');
     }
     return {
