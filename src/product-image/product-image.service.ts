@@ -1,8 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateProductImageDto } from './dto/create-product-image.dto';
 import { UpdateProductImageDto } from './dto/update-product-image.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Promise, Types } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { ProductImage } from './schemas/product-image.schema';
 import { Service } from '../decorators/baseService.decorator';
 import { IResponse } from '../ultility/interfaceModel';

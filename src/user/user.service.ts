@@ -6,36 +6,27 @@ import { User } from './schemas/user.schema';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { Service } from '../decorators/baseService.decorator';
+import { IResponse } from '../ultility/interfaceModel';
 
 @Injectable()
-export class UserService {
+export class UserService extends Service<User, CreateUserDto, UpdateUserDto> {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
     private jwtService: JwtService,
-  ) {}
-
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    createUserDto.password = await bcrypt.hash(createUserDto.password, 10);
-    return await this.userModel.create(createUserDto);
+  ) {
+    super(userModel);
   }
 
-  async findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
-  }
-
-  findOne(id: number): string {
-    return `This action returns a #${id} user`;
-  }
-
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-    const user = await this.userModel.findByIdAndUpdate(id, updateUserDto, {
-      new: true,
-    });
-    return user;
-  }
-
-  remove(id: number): string {
-    return `This action removes a #${id} user`;
+  async create(createUserDto: CreateUserDto[]): Promise<IResponse<User>> {
+    createUserDto[0].password = await bcrypt.hash(createUserDto[0].password, 10);
+    const user = await this.userModel.create(createUserDto[0]);
+    return {
+      statusCode: 200,
+      message: 'create new bill success',
+      total: 1,
+      data: [user],
+    };
   }
 
   async createBulk(createUserDto: CreateUserDto[]): Promise<User[]> {

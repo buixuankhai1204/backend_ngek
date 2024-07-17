@@ -6,6 +6,9 @@ export class Supply {
   name: string;
 
   @Prop({ required: true })
+  ownerName: string;
+
+  @Prop({ required: true })
   address: string;
 
   @Prop({ required: true })
@@ -17,8 +20,11 @@ export class Supply {
   @Prop({ required: true })
   bankName: string;
 
-  @Prop({ required: true })
-  status: boolean;
+  @Prop({ required: false })
+  isActive: boolean;
+
+  @Prop({ required: false })
+  note: string;
 
   @Prop({ default: Date.now() })
   createdAt: Date;

@@ -2,7 +2,6 @@ import {
   IsEmail,
   IsNotEmpty,
   IsNumber,
-  IsNumberString,
   IsOptional,
   IsPhoneNumber,
   IsString,
@@ -49,7 +48,3 @@ export class CreateUserDto {
   roles: string;
 }
 
-export class FindOneParams {
-  @IsNumberString()
-  id: number;
-}

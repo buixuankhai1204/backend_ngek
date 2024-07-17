@@ -6,15 +6,16 @@ import {
   Patch,
   Param,
   Delete,
-  ParseArrayPipe,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto, FindOneParams } from './dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './schemas/user.schema';
 import { SignInDto } from './dto/sign-in.dto';
 import { AuthGuard } from './user.guard';
+import { FindOneParams, IResponse } from '../ultility/interfaceModel';
+import { Types } from 'mongoose';
 
 @Controller('user')
 export class UserController {
@@ -22,38 +23,30 @@ export class UserController {
 
   @Post()
   // @UseGuards(AuthGuard)
-  create(@Body() createUserDto: CreateUserDto): Promise<User> {
+  create(@Body() createUserDto: CreateUserDto[]): Promise<IResponse<User>> {
     return this.userService.create(createUserDto);
   }
 
   @Get()
   // @UseGuards(AuthGuard)
-  findAll(): Promise<User[]> {
+  findAll(): Promise<IResponse<User>> {
     return this.userService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param() param: FindOneParams) {
-    return this.userService.findOne(param.id);
+  findOne(@Param() param: FindOneParams): Promise<IResponse<User>> {
+    return this.userService.findOne(new Types.ObjectId(param.id));
   }
 
   @UseGuards(AuthGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(id, updateUserDto);
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<IResponse<User>> {
+    return this.userService.updateOne(new Types.ObjectId(id), updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
-  }
-
-  @Post()
-  async createBulk(
-    @Body(new ParseArrayPipe({ items: CreateUserDto }))
-    createUserDtos: CreateUserDto[],
-  ): Promise<Array<User>> {
-    return this.userService.createBulk(createUserDtos);
+  remove(@Param('id') id: string): Promise<IResponse<User>> {
+    return this.userService.remove(new Types.ObjectId(id));
   }
 
   @Post('sign-in')

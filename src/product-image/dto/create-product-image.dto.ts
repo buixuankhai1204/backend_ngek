@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateProductImageDto {
   @IsNotEmpty()
@@ -7,13 +7,4 @@ export class CreateProductImageDto {
   @IsNotEmpty()
   @IsString()
   imageUrl: string;
-
-  @IsOptional()
-  isMail: boolean;
-}
-
-export class GetImagesByProductIdDto {
-  @IsNotEmpty()
-  @Length(24, 24)
-  productId: string;
 }
