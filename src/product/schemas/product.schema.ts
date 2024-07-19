@@ -25,7 +25,7 @@ export class Product {
   name: string;
 
   @Prop({ required: true })
-  description!: string;
+  description: string;
 
   @Prop({ required: true })
   thumbnail: string;
@@ -36,8 +36,8 @@ export class Product {
   @Prop({ required: true })
   maxPrice: number;
 
-  @Prop({ default: 0 })
-  isActive: number;
+  @Prop({ default: true })
+  isActive: boolean;
 
   @Prop({ default: Date.now() })
   createdAt: Date;

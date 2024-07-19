@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, Length } from 'class-validator';
 
 export class CreateProductImageDto {
   @IsNotEmpty()
@@ -6,5 +6,6 @@ export class CreateProductImageDto {
 
   @IsNotEmpty()
   @IsString()
+  @Length(4)
   imageUrl: string;
 }

@@ -4,7 +4,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './schemas/product.schema';
 import { Service } from '../decorators/baseService.decorator';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Promise, Types } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { IResponse } from '../ultility/interfaceModel';
 import { Voucher } from '../voucher/schemas/voucher.schema';
 import { ProductVoucher } from '../product-voucher/schemas/product-voucher.schema';
@@ -42,23 +42,6 @@ export class ProductService extends Service<
     return {
       statusCode: 200,
       message: 'create new bill success',
-      total: 0,
-      data: [],
-    };
-  }
-
-  async uploadImages(images: CreateProductImageDto[]): Promise<IResponse<void>> {
-    const product = await this.productModel.findById(images[0].productId);
-    if (!product) {
-      throw new BadRequestException("Can not find this product");
-    }
-      const newImages = await this.productImageModel.create(images);
-    if (!newImages.length) {
-      throw new BadRequestException('Can not create images');
-    }
-    return {
-      statusCode: 200,
-      message: 'create list image for product success',
       total: 0,
       data: [],
     };

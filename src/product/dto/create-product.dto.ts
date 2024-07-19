@@ -1,7 +1,7 @@
 import {
   IsBoolean,
   IsNotEmpty,
-  IsOptional,
+  IsOptional, Length,
   MaxLength,
   MinLength,
 } from 'class-validator';
@@ -16,6 +16,7 @@ export class CreateProductDto {
   categoryId: string;
 
   @IsNotEmpty()
+  @Length(5)
   description: string;
 
   @IsNotEmpty()

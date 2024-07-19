@@ -10,7 +10,7 @@ async function bootstrap() {
   });
   app.useGlobalPipes(
     new ValidationPipe({
-      // disableErrorMessages: true,
+      disableErrorMessages: true,
       enableDebugMessages: true,
       errorHttpStatusCode: HttpStatus.BAD_REQUEST,
     }),
@@ -20,4 +20,5 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   await app.listen(configService.get<number>('database1.port'));
 }
+
 bootstrap();
