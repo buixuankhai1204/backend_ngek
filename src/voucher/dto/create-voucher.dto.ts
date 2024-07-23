@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 import { ETypeVoucher } from '../schemas/voucher.schema';
 
 export class CreateVoucherDto {
@@ -8,7 +8,7 @@ export class CreateVoucherDto {
   @IsNotEmpty()
   description: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   type: ETypeVoucher;
 
   @IsNotEmpty()

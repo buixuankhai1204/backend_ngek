@@ -21,7 +21,7 @@ import {
   SortingParams,
 } from '../decorators/baseService.decorator';
 import { Types } from 'mongoose';
-import { IResponse } from '../ultility/interfaceModel';
+import { FindOneParams, IResponse } from '../ultility/interfaceModel';
 import { AuthGuard } from '../user/user.guard';
 import { Roles } from '../roles.decorator';
 
@@ -46,8 +46,8 @@ export class CategoryController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<IResponse<Category>> {
-    return this.categoryService.findOne(new Types.ObjectId(id));
+  findOne(@Param() id: FindOneParams): Promise<IResponse<Category>> {
+    return this.categoryService.findOne(new Types.ObjectId(id.id));
   }
 
   @Patch(':id')

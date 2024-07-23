@@ -7,13 +7,6 @@ import {
 import { FilterQuery, Model, Types } from 'mongoose';
 import { IResponse } from '../ultility/interfaceModel';
 
-export type PaginatedResource<T> = {
-  total: number;
-  items: T[];
-  page: number;
-  size: number;
-};
-
 export interface Pagination {
   page: number;
   limit: number;
@@ -179,6 +172,7 @@ export abstract class Service<T, P, U> {
 
   async create(createRequest: P[]): Promise<IResponse<T>> {
     const data: T[] = await this.repository.create(createRequest);
+
     if (!data) {
       throw new Error('Can not create new data');
     }

@@ -1,11 +1,9 @@
-import { HydratedDocument } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-export type VoucherDocument = HydratedDocument<Voucher>;
 
 export enum ETypeVoucher {
   Voucher = 'Voucher',
-  coupon = "Coupon"
+  coupon = 'Coupon'
 }
 
 @Schema()
@@ -16,7 +14,7 @@ export class Voucher {
   @Prop({ required: true })
   description: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false, default: ETypeVoucher.Voucher })
   type: ETypeVoucher;
 
   @Prop({ required: true })
@@ -24,6 +22,9 @@ export class Voucher {
 
   @Prop({ required: true })
   quantity: string;
+
+  @Prop({ default: true })
+  isActive: boolean;
 }
 
 

@@ -10,7 +10,7 @@ async function bootstrap() {
   });
   app.useGlobalPipes(
     new ValidationPipe({
-      disableErrorMessages: true,
+      disableErrorMessages: false,
       enableDebugMessages: true,
       errorHttpStatusCode: HttpStatus.BAD_REQUEST,
     }),

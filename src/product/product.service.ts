@@ -9,7 +9,6 @@ import { IResponse } from '../ultility/interfaceModel';
 import { Voucher } from '../voucher/schemas/voucher.schema';
 import { ProductVoucher } from '../product-voucher/schemas/product-voucher.schema';
 import { ProductImage } from '../product-image/schemas/product-image.schema';
-import { CreateProductImageDto } from '../product-image/dto/create-product-image.dto';
 
 @Injectable()
 export class ProductService extends Service<

@@ -5,6 +5,14 @@ import { UpdateVoucherDto } from './dto/update-voucher.dto';
 import { IResponse } from '../ultility/interfaceModel';
 import { Voucher } from './schemas/voucher.schema';
 import { Types } from 'mongoose';
+import {
+  Filtering,
+  FilteringParams,
+  Pagination,
+  PaginationParams,
+  Sorting,
+  SortingParams,
+} from '../decorators/baseService.decorator';
 
 @Controller('voucher')
 export class VoucherController {
@@ -16,8 +24,12 @@ export class VoucherController {
   }
 
   @Get()
-  findAll():Promise<IResponse<Voucher>> {
-    return this.voucherService.findAll();
+  findAll(
+    @PaginationParams() pagination: Pagination,
+    @SortingParams(['name', 'minPrice', 'maxPrice']) sort?: Sorting,
+    @FilteringParams(['name']) filter?: Filtering
+  ):Promise<IResponse<Voucher>> {
+    return this.voucherService.findAll(filter, sort, pagination);
   }
 
   @Get(':id')

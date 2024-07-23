@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import { BadRequestException } from '@nestjs/common';
 
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
