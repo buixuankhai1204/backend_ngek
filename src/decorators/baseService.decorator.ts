@@ -116,7 +116,7 @@ export const FilteringParams = createParamDecorator(
     if (!Object.values(FilterRule).includes(rule as FilterRule))
       throw new BadRequestException(`Invalid filter rule: ${rule}`);
 
-    console.log(property,rule,value)
+    console.log(property, rule, value);
     return { property, rule, value };
   },
 );
@@ -130,7 +130,7 @@ export abstract class Service<T, P, U> {
     if (!filter) return {};
     if (filter.rule == FilterRule.NOT_EQUALS)
       return { [filter.property]: { $ne: filter.value } };
-    if(filter.rule == FilterRule.EQUALS)
+    if (filter.rule == FilterRule.EQUALS)
       return { [filter.property]: { $eq: filter.value } };
     if (filter.rule == FilterRule.GREATER_THAN)
       return { [filter.property]: { $gt: filter.value } };

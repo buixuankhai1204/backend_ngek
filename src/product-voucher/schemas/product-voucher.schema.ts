@@ -3,10 +3,10 @@ import mongoose from 'mongoose';
 
 @Schema()
 export class ProductVoucher {
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Product' })
+  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId })
   productId: string;
 
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Voucher' })
+  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'voucher' })
   voucherId: string;
 
   @Prop({ default: Date.now() })
