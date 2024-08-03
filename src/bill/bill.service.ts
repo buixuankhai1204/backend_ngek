@@ -22,8 +22,8 @@ export class BillService extends Service<Bill, CreateBillDto, UpdateBillDto> {
   }
 
   async create(createBillDto: CreateBillDto[]): Promise<IResponse<Bill>> {
-
-    const supply: Supply = await this.supplyModel.findOne({ _id: createBillDto[0].supplyId, status: true });
+    console.log(createBillDto[0].supplyId)
+    const supply: Supply = await this.supplyModel.findOne({ _id: new Types.ObjectId(createBillDto[0].supplyId), isActive: true });
     if (!supply) {
       throw new BadRequestException('Can not find supplier by this id');
     }
@@ -36,8 +36,8 @@ export class BillService extends Service<Bill, CreateBillDto, UpdateBillDto> {
     return {
       statusCode: 200,
       message: 'create new bill success',
-      total: 0,
-      data: [],
+      total: bill.length,
+      data: bill,
     };
   }
 

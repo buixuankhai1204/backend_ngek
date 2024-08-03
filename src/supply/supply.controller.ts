@@ -35,17 +35,17 @@ export class SupplyController {
   }
 
   @Get(':id')
-  findOne(@Param('id') params: FindOneParams): Promise<IResponse<Supply>> {
+  findOne(@Param() params: FindOneParams): Promise<IResponse<Supply>> {
     return this.supplyService.findOne(new Types.ObjectId(params.id));
   }
 
   @Patch(':id')
-  update(@Param('id') id: FindOneParams, @Body() updateSupplyDto: UpdateSupplyDto): Promise<IResponse<Supply>> {
+  update(@Param() id: FindOneParams, @Body() updateSupplyDto: UpdateSupplyDto): Promise<IResponse<Supply>> {
     return this.supplyService.updateOne(new Types.ObjectId(id.id), updateSupplyDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: FindOneParams): Promise<IResponse<Supply>> {
+  remove(@Param() id: FindOneParams): Promise<IResponse<Supply>> {
     return this.supplyService.remove(new Types.ObjectId(id.id));
   }
 }

@@ -232,7 +232,7 @@ export abstract class Service<T, P, U> {
 
     return {
       statusCode: 200,
-      message: 'delete new record success',
+      message: 'delete record success',
       total: 1,
       data: [deleteData],
     };

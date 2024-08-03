@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { IResponse } from '../ultility/interfaceModel';
 import { Service } from '../decorators/baseService.decorator';
 import { ProductBill } from './schemas/product-bill.schema';
@@ -26,8 +26,9 @@ export class ProductBillService extends Service<ProductBill, CreateProductBillDt
 
     const bulkOps = newListProductForBill.map(update => ({
       updateOne: {
-        filter: { productId: update.productId },
+        filter: { productId: update.productId, color: update.color, size: update.size },
         update: { $inc: { quantity: update.quantity } },
+        upsert: true
       },
     }));
 
@@ -37,7 +38,7 @@ export class ProductBillService extends Service<ProductBill, CreateProductBillDt
       statusCode: 200,
       message: 'Create products in bill success',
       total: newListProductForBill.length,
-      data: [],
+      data: newListProductForBill,
     };
   }
 

@@ -28,6 +28,9 @@ export class Order {
   @Prop()
   note: string;
 
+  @Prop({ required: false, default: true })
+  isActive: boolean;
+
   @Prop({ default: Date.now() })
   createdAt: Date;
 

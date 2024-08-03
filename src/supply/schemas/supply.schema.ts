@@ -5,7 +5,7 @@ export class Supply {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   ownerName: string;
 
   @Prop({ required: true })
@@ -14,13 +14,13 @@ export class Supply {
   @Prop({ required: true })
   phoneNumber: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   bankAccount: number;
 
   @Prop({ required: true })
   bankName: string;
 
-  @Prop({ required: false })
+  @Prop({ required: false, default: true })
   isActive: boolean;
 
   @Prop({ required: false })

@@ -1,4 +1,4 @@
-import { BadRequestException, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
@@ -21,7 +21,13 @@ import * as Joi from 'joi';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017'),
+    MongooseModule.forRoot('mongodb://localhost:27017', {
+      connectionFactory: (connection) => {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        connection.plugin(require('mongoose-unique-validator'));
+        return connection;
+      }
+    }),
     ConfigModule.forRoot({
       envFilePath: ['.env.development'],
       load: [databaseConfig],
