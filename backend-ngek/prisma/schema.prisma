@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Department {
+  departmentId   Int        @id @default(autoincrement())
+  departmentName String     @unique
+  description    String?
+  isActive       Boolean?   @default(true)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  employees      Employee[]
+}
+
+model Employee {
+  employeeId      Int         @id @default(autoincrement())
+  name            String      @unique
+  departmentId    Int?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  department      Department? @relation(fields: [departmentId], references: [departmentId])
+  Request         Request[]
+  currentEmployee Step[]      @relation("current_employee")
+}
+
+model Request {
+  requestId     Int      @id @default(autoincrement())
+  requestType   String?  @default("categoryFrame")
+  currentStatus String?  @default("waiting")
+  totalStep     Int
+  content       String
+  currentStepId Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  ownerId       Int
+  Owner         Employee @relation(fields: [ownerId], references: [employeeId])
+  steps         Step[]
+}
+
+model Step {
+  stepId         Int      @id @default(autoincrement())
+  previousStepId Int?
+  actorId        Int
+  status         String?  @default("waiting")
+  feedback       String?
+  requestId      Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  Employee       Employee @relation("current_employee", fields: [actorId], references: [employeeId])
+  previousStep   Step?    @relation("previous step", fields: [previousStepId], references: [stepId])
+  Step           Step[]   @relation("previous step")
+  request        Request  @relation(fields: [requestId], references: [requestId])
+}

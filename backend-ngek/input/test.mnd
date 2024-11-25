@@ -1,0 +1,11 @@
+%% 1
+flowchart TD
+    %% 1-0
+    A[xuankhai]:::success -->|Duyet chuong trinh| B[Nhan vien A]
+    %% 3-1
+    B -->|accept| D[Quan ly A]
+    B -->|reject| A
+    %% 5-1
+    D -->|accept| F[success]
+    D -->|reject| A
+    classDef success stroke:#0f0
