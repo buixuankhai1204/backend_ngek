@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CreateRequestDto } from './dto/create-request.dto';
-import { UpdateRequestDto } from './dto/update-request.dto';
-import { PrismaService } from '../prisma/prisma.service';
+import { CreateRequestDto } from './dto/create-request.dto.js';
+import { UpdateRequestDto } from './dto/update-request.dto.js';
+import { PrismaService } from '../prisma/prisma.service.js';
 import { RequestEntity } from './entities/request.entity';
 
 @Injectable()
@@ -37,10 +37,9 @@ export class RequestService {
     });
   }
 
-  parseFileContentMnd(file: Express.Multer.File): Promise<string> {
+  parseFileContentMnd(data: string[]): Promise<boolean> {
     return this.prisma.$transaction(async (tx) => {
       try {
-        const data = file.buffer.toString().split('\n');
         const requestId = parseInt(data[0]?.split(' ')[1]);
         const map: Map<number, { actorId: number; parentStep: number }> = new Map();
         const stepIdByStepNumber: Map<number, number> = new Map();
@@ -52,7 +51,7 @@ export class RequestService {
         const request = await tx.request.findUnique({ where: { requestId: requestId } });
         if (!request) {
           Logger.error('Can not find any request with this id');
-          return undefined;
+          return false;
         }
 
         for (let i = 2; i < data.length; i++) {
@@ -75,7 +74,7 @@ export class RequestService {
             });
             if (!response) {
               Logger.error('Can not find any request with this id');
-              return undefined;
+              return false;
             }
             listSteps.push(response);
             stepIdByStepNumber.set(countStep, response.stepId);
@@ -87,6 +86,7 @@ export class RequestService {
           data: { currentStepId: listSteps[0].stepId ?? 0 },
           where: { requestId: listSteps[0].requestId ?? 0 },
         });
+        return true;
       } catch (error) {
         Logger.log(error);
       }

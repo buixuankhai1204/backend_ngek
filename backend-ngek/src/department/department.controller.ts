@@ -1,9 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
-import { DepartmentService } from './department.service';
-import { CreateDepartmentDto } from './dto/create-department.dto';
-import { UpdateDepartmentDto } from './dto/update-department.dto';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Logger } from '@nestjs/common';
+import { DepartmentService } from './department.service.js';
+import { CreateDepartmentDto } from './dto/create-department.dto.js';
+import { UpdateDepartmentDto } from './dto/update-department.dto.js';
 import { DepartmentEntity } from './entities/department.entity';
-import { ApiCreatedResponse } from '@nestjs/swagger';
 import { IResponse } from '../ultility/interfaceModel';
 
 @Controller('department')
@@ -14,6 +13,7 @@ export class DepartmentController {
   @Post('/')
   async create(@Body() createDepartmentDto: CreateDepartmentDto): Promise<IResponse<DepartmentEntity>> {
     try {
+      Logger.log(createDepartmentDto);
       const data = await this.departmentService.create(createDepartmentDto);
       if (data) {
         return {

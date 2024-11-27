@@ -1,21 +1,19 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AppController } from './app.controller.js';
+import { AppService } from './app.service.js';
 import { ConfigModule } from '@nestjs/config';
-import { DepartmentModule } from './department/department.module';
-import { EmployeeModule } from './employee/employee.module';
-import { RequestModule } from './request/request.module';
-import databaseConfig from '../config/database.config';
-import * as Joi from 'joi';
-import { PrismaModule } from './prisma/prisma.module';
-import { StepModule } from './step/step.module';
+import { DepartmentModule } from './department/department.module.js';
+import { EmployeeModule } from './employee/employee.module.js';
+import { RequestModule } from './request/request.module.js';
+import Joi from 'joi';
+import { PrismaModule } from './prisma/prisma.module.js';
+import { StepModule } from './step/step.module.js';
 
 @Module({
   imports: [
 
     ConfigModule.forRoot({
       envFilePath: ['.env'],
-      load: [databaseConfig],
       cache: true,
       validationSchema: Joi.object({
         NODE_ENV: Joi.string()
@@ -28,7 +26,7 @@ import { StepModule } from './step/step.module';
       }),
       validationOptions: {
         allowUnknown: true,
-        abortEarly: false,
+        abortEarly: true,
       },
     }),
     // UserAddressModule,

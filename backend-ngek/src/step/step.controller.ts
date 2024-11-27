@@ -1,42 +1,83 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put, HttpException, HttpStatus } from '@nestjs/common';
-import { StepService } from './step.service';
-import { CreateStepDto } from './dto/create-step.dto';
-import { UpdateStepDto } from './dto/update-step.dto';
-import { PutStepDto } from './dto/put-step.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Put,
+  HttpException,
+  HttpStatus,
+  Logger,
+} from '@nestjs/common';
+import { StepService } from './step.service.js';
+import { CreateStepDto } from './dto/create-step.dto.js';
+import { UpdateStepDto } from './dto/update-step.dto.js';
+import { PutStepDto } from './dto/put-step.dto.js';
 import { IResponse } from '../ultility/interfaceModel';
 
 @Controller('step')
 export class StepController {
-  constructor(private readonly stepService: StepService) {
+  constructor(private readonly stepService: StepService,
+  ) {
   }
 
   @Post()
-  create(@Body() createStepDto: CreateStepDto) {
-    return this.stepService.create(createStepDto);
+  async create(@Body() createStepDtos: CreateStepDto): Promise<IResponse<undefined | boolean>> {
+    try {
+      const data = await this.stepService.create(createStepDtos);
+      if (data) {
+        return {
+          statusCode: 200,
+          message: 'Do something with this step success!',
+          total: 1,
+          data: [true],
+        };
+      }
+      throw new HttpException({
+        status: HttpStatus.FORBIDDEN,
+        error: 'Can not generate new steps',
+      }, HttpStatus.FORBIDDEN, {
+        cause: 'Inert new item fail!',
+      });
+
+    } catch (error) {
+      Logger.error(error.message);
+      throw new HttpException({
+        status: HttpStatus.FORBIDDEN,
+        error: 'Can not generate new steps',
+      }, HttpStatus.FORBIDDEN, {
+        cause: 'Inert new item fail!',
+      });
+    }
   }
 
   @Put('/action')
-  async stepAction(@Body() putStepDTO: PutStepDto): Promise<IResponse<unknown>> {
+  async stepAction(@Body() putStepDTO: PutStepDto): Promise<IResponse<undefined | boolean>> {
     try {
       const data = await this.stepService.stepAction(putStepDTO);
+      if (data) {
         return {
           statusCode: 200,
           message: 'Do something with this step success!',
           total: 1,
           data: [data],
         };
-      // throw new HttpException({
-      //   status: HttpStatus.FORBIDDEN,
-      //   error: 'Can not find any request',
-      // }, HttpStatus.FORBIDDEN, {
-      //   cause: 'Inert new item fail!',
-      // });
-    } catch (error) {
+      }
       throw new HttpException({
         status: HttpStatus.FORBIDDEN,
-        error: 'Can not get all department',
+        error: 'Can not generate new steps',
       }, HttpStatus.FORBIDDEN, {
-        cause: error,
+        cause: 'Inert new item fail!',
+      });
+    } catch (err) {
+      console.error(err);
+      throw new HttpException({
+        status: HttpStatus.FORBIDDEN,
+        error: 'Can not generate new steps',
+      }, HttpStatus.FORBIDDEN, {
+        cause: 'Inert new item fail!',
       });
     }
   }

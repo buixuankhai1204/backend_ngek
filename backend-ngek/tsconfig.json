@@ -1,21 +1,32 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "ES2021",
-    "sourceMap": true,
+    "module": "esnext",
+    // Sử dụng ES Modules
+    "target": "ES2020",
+    // Nhắm tới ES2020
+    "moduleResolution": "node",
+    // Giải quyết module theo chuẩn Node.js
     "outDir": "./dist",
-    "baseUrl": "./",
-    "incremental": true,
+    // Thư mục xuất kết quả biên dịch
+    "rootDir": "./src",
+    // Thư mục gốc của mã nguồn
+    "esModuleInterop": true,
+    // Hỗ trợ tương thích giữa ESM và CommonJS
+    "forceConsistentCasingInFileNames": true,
+    // Đảm bảo tên file nhất quán
     "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    // Bỏ qua kiểm tra type của thư viện bên ngoài
+    "allowSyntheticDefaultImports": true,
+    // Cho phép import mặc định với CommonJS
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
+  },
+  "include": [
+    "src"
+  ],
+  // Bao gồm mã nguồn
+  "exclude": [
+    "node_modules"
+  ]
+  // Loại trừ thư mục không cần thiết
 }

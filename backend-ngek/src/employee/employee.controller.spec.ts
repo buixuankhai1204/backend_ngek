@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { EmployeeController } from './employee.controller';
-import { EmployeeService } from './employee.service';
+import { EmployeeController } from './employee.controller.js';
+import { EmployeeService } from './employee.service.js';
 
 describe('EmployeeController', () => {
   let controller: EmployeeController;

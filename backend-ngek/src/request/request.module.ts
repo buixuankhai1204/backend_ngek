@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { RequestService } from './request.service';
-import { RequestController } from './request.controller';
-import { PrismaModule } from '../prisma/prisma.module';
+import { RequestService } from './request.service.js';
+import { RequestController } from './request.controller.js';
+import { PrismaModule } from '../prisma/prisma.module.js';
 
 @Module({
   controllers: [RequestController],

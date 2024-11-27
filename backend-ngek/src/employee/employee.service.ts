@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CreateEmployeeDto } from './dto/create-employee.dto';
-import { UpdateEmployeeDto } from './dto/update-employee.dto';
-import { PrismaService } from '../prisma/prisma.service';
+import { CreateEmployeeDto } from './dto/create-employee.dto.js';
+import { UpdateEmployeeDto } from './dto/update-employee.dto.js';
+import { PrismaService } from '../prisma/prisma.service.js';
 import { EmployeeEntity } from './entities/employee.entity';
 
 @Injectable()
@@ -23,7 +23,7 @@ export class EmployeeService {
 
   async findAll(): Promise<EmployeeEntity[]> {
     try {
-      await this.prisma.$transaction(async (tx) => {
+      return this.prisma.$transaction(async (tx) => {
         return tx.employee.findMany();
       });
     } catch (error) {

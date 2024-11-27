@@ -1,28 +1,32 @@
+import { RequestEntity } from '../../request/entities/request.entity';
+import { EmployeeEntity } from '../../employee/entities/employee.entity';
 import { Step } from '@prisma/client';
-import { ApiProperty } from '@nestjs/swagger';
+import { IntersectionType } from '@nestjs/mapped-types';
 
 export class StepEntity implements Step {
-  @ApiProperty()
   stepId: number;
 
-  @ApiProperty({ required: false })
   previousStepId: number;
 
-  @ApiProperty()
   actorId: number;
 
-  @ApiProperty()
   status: string;
 
-  @ApiProperty()
   feedback: string;
 
-  @ApiProperty()
   requestId: number;
 
-  @ApiProperty({ required: false, default: Date.now() })
   createdAt: Date;
 
-  @ApiProperty({ required: false, default: Date.now() })
   updatedAt: Date;
+}
+
+export class RequestStep extends IntersectionType(
+  RequestEntity, StepEntity,
+) {
+}
+
+export class EmployeeStep extends IntersectionType(
+  EmployeeEntity, StepEntity,
+) {
 }

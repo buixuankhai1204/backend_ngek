@@ -7,7 +7,7 @@ export enum EImageType {
 }
 
 export class Validation {
-  public static checkUrl(url: string): boolean {
+  public static checkUrl(url: string): undefined | boolean {
     const parts: string[] = url.split('.');
     if (parts.length != 2) {
       return false;

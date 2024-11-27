@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CreateDepartmentDto } from './dto/create-department.dto';
-import { UpdateDepartmentDto } from './dto/update-department.dto';
-import { PrismaService } from '../prisma/prisma.service';
+import { CreateDepartmentDto } from './dto/create-department.dto.js';
+import { UpdateDepartmentDto } from './dto/update-department.dto.js';
+import { PrismaService } from '../prisma/prisma.service.js';
 import { DepartmentEntity } from './entities/department.entity';
 
 @Injectable()
@@ -13,10 +13,10 @@ export class DepartmentService {
     return this.prisma.$transaction(async (tx) => {
       try {
         const a = await tx.department.create({ data: createDepartmentDto });
-        Logger.error(a);
+        console.error(a);
         return a;
       } catch (err) {
-        Logger.error(err);
+        console.error(err);
         return undefined;
       }
     });

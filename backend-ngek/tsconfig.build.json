@@ -1,4 +1,9 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
+  "compilerOptions": {
+    "module": "esnext",            // Sử dụng ES Modules khi build
+    "declaration": true,           // Xuất file `.d.ts` cho type
+    "removeComments": true         // Loại bỏ comment trong file build
+  },
+  "exclude": ["node_modules", "dist"]
 }

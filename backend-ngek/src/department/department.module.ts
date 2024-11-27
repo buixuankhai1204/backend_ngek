@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { DepartmentService } from './department.service';
-import { DepartmentController } from './department.controller';
-import { PrismaModule } from '../prisma/prisma.module';
+import { DepartmentService } from './department.service.js';
+import { DepartmentController } from './department.controller.js';
+import { PrismaModule } from '../prisma/prisma.module.js';
 
 @Module({
   controllers: [DepartmentController],

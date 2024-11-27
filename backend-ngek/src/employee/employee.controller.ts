@@ -1,9 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Logger } from '@nestjs/common';
-import { EmployeeService } from './employee.service';
-import { CreateEmployeeDto } from './dto/create-employee.dto';
-import { UpdateEmployeeDto } from './dto/update-employee.dto';
+import { EmployeeService } from './employee.service.js';
+import { CreateEmployeeDto } from './dto/create-employee.dto.js';
+import { UpdateEmployeeDto } from './dto/update-employee.dto.js';
 import { EmployeeEntity } from './entities/employee.entity';
-import { ApiCreatedResponse } from '@nestjs/swagger';
 import { IResponse } from '../ultility/interfaceModel';
 
 @Controller('employee')

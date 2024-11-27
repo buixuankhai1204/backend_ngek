@@ -10,8 +10,8 @@ import {
   HttpStatus,
   UseInterceptors, UploadedFile, Logger,
 } from '@nestjs/common';
-import { RequestService } from './request.service';
-import { CreateRequestDto } from './dto/create-request.dto';
+import { RequestService } from './request.service.js';
+import { CreateRequestDto } from './dto/create-request.dto.js';
 import { RequestEntity } from './entities/request.entity';
 import { IResponse } from '../ultility/interfaceModel';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -82,22 +82,33 @@ export class RequestController {
 
   @Post('/proccess-generate')
   @UseInterceptors(FileInterceptor('test'))
-  async processGenerate(@UploadedFile() file: Express.Multer.File): Promise<IResponse<string>> {
+  async processGenerate(@UploadedFile() file: Express.Multer.File): Promise<IResponse<boolean>> {
     try {
-      try {
-        await this.requestService.parseFileContentMnd(file);
-      } catch (err) {
-        console.error(err);
+      const data = await this.requestService.parseFileContentMnd(file.buffer.toString().split('\n'));
+      if (data) {
+        return {
+          statusCode: 200,
+          message: 'find all requests by owner id success!',
+          total: 1,
+          data: [data],
+        };
       }
-      return {
-        statusCode: 200,
-        message: 'find all requests by owner id success!',
-        total: 1,
-        data: ['link url'],
-      };
-    } catch (error) {
-
+      throw new HttpException({
+        status: HttpStatus.FORBIDDEN,
+        error: 'Can not generate new steps',
+      }, HttpStatus.FORBIDDEN, {
+        cause: 'Inert new item fail!',
+      });
+    } catch (err) {
+      console.error(err);
+      throw new HttpException({
+        status: HttpStatus.FORBIDDEN,
+        error: 'Can not generate new steps',
+      }, HttpStatus.FORBIDDEN, {
+        cause: 'Inert new item fail!',
+      });
     }
+
   }
 
   // @Get(':id')
